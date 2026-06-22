@@ -1,0 +1,25 @@
+[gd_scene format=3 uid="uid://ri0faykq6n2e"]
+
+[ext_resource type="Script" uid="uid://i5in0kmay6tq" path="res://scene/battle/battle_manager.gd" id="1_hfrix"]
+[ext_resource type="PackedScene" uid="uid://cn7jawlt1k0aa" path="res://scripts/characters/player.tscn" id="3_hfrix"]
+[ext_resource type="PackedScene" uid="uid://ckmfcp604fw20" path="res://scene/battle/ui_battle.tscn" id="4_2rfxa"]
+[ext_resource type="PackedScene" uid="uid://64tnpm6qyy60" path="res://scripts/characters/character.tscn" id="4_onrr4"]
+
+[node name="BattleMain" type="Node2D" unique_id=1131230524 node_paths=PackedStringArray("camera", "player", "enemy")]
+script = ExtResource("1_hfrix")
+camera = NodePath("Camera2D")
+player = NodePath("Player")
+enemy = NodePath("Character2")
+
+[node name="Camera2D" type="Camera2D" parent="." unique_id=1996028079]
+zoom = Vector2(0.75, 0.75)
+
+[node name="Player" parent="." unique_id=362625524 instance=ExtResource("3_hfrix")]
+position = Vector2(-424, 189)
+prefered_position = 4
+
+[node name="Character2" parent="." unique_id=1624971502 instance=ExtResource("4_onrr4")]
+position = Vector2(-984, -52)
+prefered_position = 2
+
+[node name="UIBattle" parent="." unique_id=1112870766 instance=ExtResource("4_2rfxa")]

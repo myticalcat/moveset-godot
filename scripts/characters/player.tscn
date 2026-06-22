@@ -1,0 +1,73 @@
+[gd_scene format=3 uid="uid://cn7jawlt1k0aa"]
+
+[ext_resource type="Texture2D" uid="uid://djyc2t1o7cnfr" path="res://icon.svg" id="1_i13yi"]
+[ext_resource type="Script" uid="uid://kf0ssgbacqoe" path="res://scripts/characters/player.gd" id="2_i13yi"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_i13yi"]
+radius = 83.21658
+
+[node name="Character" type="Sprite2D" unique_id=362625524 node_paths=PackedStringArray("collision", "mouse_area", "special_atk_btn", "light_atk_btn", "strong_atk_btn", "parry_btn", "move_forward_btn", "move_backward_btn")]
+texture = ExtResource("1_i13yi")
+script = ExtResource("2_i13yi")
+collision = NodePath("Area2D/CollisionShape2D")
+mouse_area = NodePath("Area2D")
+special_atk_btn = NodePath("Special Attack")
+light_atk_btn = NodePath("LightAtk")
+strong_atk_btn = NodePath("Strong Attack")
+parry_btn = NodePath("Parry")
+move_forward_btn = NodePath("Move Forward")
+move_backward_btn = NodePath("Move Backward")
+
+[node name="Area2D" type="Area2D" parent="." unique_id=1773861385]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D" unique_id=1753762646]
+shape = SubResource("CircleShape2D_i13yi")
+
+[node name="LightAtk" type="Button" parent="." unique_id=574937807]
+z_index = 1
+offset_left = 114.0
+offset_top = -30.0
+offset_right = 264.0
+offset_bottom = 30.0
+mouse_filter = 1
+text = "Light Attack"
+
+[node name="Special Attack" type="Button" parent="." unique_id=326780282]
+z_index = 1
+offset_top = 100.0
+offset_right = 150.0
+offset_bottom = 160.0
+text = "Special Attack"
+
+[node name="Strong Attack" type="Button" parent="." unique_id=223858797]
+z_index = 1
+offset_top = -181.0
+offset_right = 150.0
+offset_bottom = -121.0
+text = "Strong Attack"
+
+[node name="Parry" type="Button" parent="." unique_id=1531575583]
+z_index = 1
+offset_left = -202.0
+offset_top = -181.0
+offset_right = -52.0
+offset_bottom = -121.0
+text = "Counter"
+
+[node name="Move Forward" type="Button" parent="." unique_id=2140141472]
+z_index = 1
+offset_left = -363.0
+offset_top = -93.0
+offset_right = -213.0
+offset_bottom = -33.0
+text = "Move Forward"
+
+[node name="Move Backward" type="Button" parent="." unique_id=561282259]
+z_index = 1
+offset_left = -250.0
+offset_top = 56.0
+offset_right = -100.0
+offset_bottom = 116.0
+text = "Move Backward"
+
+[connection signal="mouse_entered" from="Area2D" to="." method="_on_area_2d_mouse_entered"]

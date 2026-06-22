@@ -1,0 +1,215 @@
+[gd_scene format=3 uid="uid://ckmfcp604fw20"]
+
+[ext_resource type="Script" uid="uid://cren4mb3j40o4" path="res://scene/battle/ui_battle.gd" id="1_7uw2c"]
+[ext_resource type="Texture2D" uid="uid://c6h4rvii8pdyo" path="res://assets/face_128.jpg" id="2_a6m4x"]
+[ext_resource type="LabelSettings" uid="uid://cowruwa6prrrk" path="res://theme/label_small.tres" id="3_6ya20"]
+[ext_resource type="LabelSettings" uid="uid://bnnf43mt36kr6" path="res://theme/label_ui_info.tres" id="3_rng56"]
+[ext_resource type="Texture2D" uid="uid://bc5rebjcoal70" path="res://assets/32_atk.jpg" id="4_rng56"]
+
+[node name="UIBattle" type="CanvasLayer" unique_id=1112870766]
+script = ExtResource("1_7uw2c")
+
+[node name="Control" type="Control" parent="." unique_id=953920951]
+layout_mode = 3
+anchor_right = 1.0
+anchor_bottom = -0.0001481374
+offset_bottom = 0.09599304
+grow_horizontal = 2
+size_flags_horizontal = 3
+metadata/_edit_use_anchors_ = true
+
+[node name="MarginContainer" type="MarginContainer" parent="Control" unique_id=514884680]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+offset_bottom = 176.24
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Control/MarginContainer" unique_id=1026069556]
+layout_mode = 2
+
+[node name="PlayerVBox" type="VBoxContainer" parent="Control/MarginContainer/HBoxContainer" unique_id=1164280890]
+layout_mode = 2
+
+[node name="InfoPanel" type="PanelContainer" parent="Control/MarginContainer/HBoxContainer/PlayerVBox" unique_id=1122780359]
+custom_minimum_size = Vector2(400, 75)
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="Control/MarginContainer/HBoxContainer/PlayerVBox/InfoPanel" unique_id=1063514375]
+layout_mode = 2
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_right = 5
+theme_override_constants/margin_bottom = 5
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Control/MarginContainer/HBoxContainer/PlayerVBox/InfoPanel/MarginContainer" unique_id=1672244241]
+layout_mode = 2
+alignment = 2
+
+[node name="PlayerPortrait" type="TextureRect" parent="Control/MarginContainer/HBoxContainer/PlayerVBox/InfoPanel/MarginContainer/HBoxContainer" unique_id=1260796986]
+layout_mode = 2
+texture = ExtResource("2_a6m4x")
+expand_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Control/MarginContainer/HBoxContainer/PlayerVBox/InfoPanel/MarginContainer/HBoxContainer" unique_id=240414874]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="PlayerName" type="Label" parent="Control/MarginContainer/HBoxContainer/PlayerVBox/InfoPanel/MarginContainer/HBoxContainer/VBoxContainer" unique_id=545873770]
+layout_mode = 2
+text = "xxxxxxxxxxxxxxxxxxxxxxxxx"
+label_settings = ExtResource("3_rng56")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Control/MarginContainer/HBoxContainer/PlayerVBox/InfoPanel/MarginContainer/HBoxContainer/VBoxContainer" unique_id=184591653]
+layout_mode = 2
+
+[node name="Label2" type="Label" parent="Control/MarginContainer/HBoxContainer/PlayerVBox/InfoPanel/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer" unique_id=627909631]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "HP"
+label_settings = ExtResource("3_rng56")
+
+[node name="VSeparator" type="VSeparator" parent="Control/MarginContainer/HBoxContainer/PlayerVBox/InfoPanel/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer" unique_id=1084006966]
+layout_mode = 2
+
+[node name="LvlPlayer" type="Label" parent="Control/MarginContainer/HBoxContainer/PlayerVBox/InfoPanel/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer" unique_id=1471821821]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Lvl. "
+label_settings = ExtResource("3_rng56")
+
+[node name="HpBarPlayer" type="ProgressBar" parent="Control/MarginContainer/HBoxContainer/PlayerVBox/InfoPanel/MarginContainer/HBoxContainer/VBoxContainer" unique_id=2073718805]
+custom_minimum_size = Vector2(0, 15)
+layout_mode = 2
+value = 100.0
+show_percentage = false
+
+[node name="HSeparator" type="HSeparator" parent="Control/MarginContainer/HBoxContainer/PlayerVBox" unique_id=1638669417]
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Control/MarginContainer/HBoxContainer/PlayerVBox" unique_id=341009431]
+layout_mode = 2
+
+[node name="PanelContainer" type="PanelContainer" parent="Control/MarginContainer/HBoxContainer/PlayerVBox/HBoxContainer" unique_id=1431347794]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="MarginContainer" type="MarginContainer" parent="Control/MarginContainer/HBoxContainer/PlayerVBox/HBoxContainer/PanelContainer" unique_id=28983805]
+layout_mode = 2
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_right = 5
+theme_override_constants/margin_bottom = 5
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Control/MarginContainer/HBoxContainer/PlayerVBox/HBoxContainer/PanelContainer/MarginContainer" unique_id=353327891]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Control/MarginContainer/HBoxContainer/PlayerVBox/HBoxContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=805452636]
+layout_mode = 2
+text = "Moves History"
+label_settings = ExtResource("3_6ya20")
+horizontal_alignment = 2
+
+[node name="ScrollContainer" type="ScrollContainer" parent="Control/MarginContainer/HBoxContainer/PlayerVBox/HBoxContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=371160196]
+custom_minimum_size = Vector2(0, 45)
+layout_mode = 2
+size_flags_vertical = 3
+horizontal_scroll_mode = 4
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Control/MarginContainer/HBoxContainer/PlayerVBox/HBoxContainer/PanelContainer/MarginContainer/VBoxContainer/ScrollContainer" unique_id=608917940]
+layout_mode = 2
+size_flags_horizontal = 3
+alignment = 2
+
+[node name="TextureRect19" type="TextureRect" parent="Control/MarginContainer/HBoxContainer/PlayerVBox/HBoxContainer/PanelContainer/MarginContainer/VBoxContainer/ScrollContainer/HBoxContainer" unique_id=1090770609]
+layout_mode = 2
+texture = ExtResource("4_rng56")
+
+[node name="Control" type="Control" parent="Control/MarginContainer/HBoxContainer" unique_id=1137003913]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="EnemyVBox" type="VBoxContainer" parent="Control/MarginContainer/HBoxContainer" unique_id=1129007350]
+layout_mode = 2
+
+[node name="InfoPanel2" type="PanelContainer" parent="Control/MarginContainer/HBoxContainer/EnemyVBox" unique_id=567907464]
+custom_minimum_size = Vector2(400, 75)
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="Control/MarginContainer/HBoxContainer/EnemyVBox/InfoPanel2" unique_id=205661274]
+layout_mode = 2
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_right = 5
+theme_override_constants/margin_bottom = 5
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Control/MarginContainer/HBoxContainer/EnemyVBox/InfoPanel2/MarginContainer" unique_id=989642243]
+layout_mode = 2
+alignment = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Control/MarginContainer/HBoxContainer/EnemyVBox/InfoPanel2/MarginContainer/HBoxContainer" unique_id=39027416]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="PlayerName" type="Label" parent="Control/MarginContainer/HBoxContainer/EnemyVBox/InfoPanel2/MarginContainer/HBoxContainer/VBoxContainer" unique_id=437812698]
+layout_mode = 2
+text = "xxxxxxxxxxxxxxxxxxxxxxxxx"
+label_settings = ExtResource("3_rng56")
+horizontal_alignment = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Control/MarginContainer/HBoxContainer/EnemyVBox/InfoPanel2/MarginContainer/HBoxContainer/VBoxContainer" unique_id=1590845522]
+layout_mode = 2
+
+[node name="LvlPlayer" type="Label" parent="Control/MarginContainer/HBoxContainer/EnemyVBox/InfoPanel2/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer" unique_id=624790539]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Lvl. "
+label_settings = ExtResource("3_rng56")
+horizontal_alignment = 2
+
+[node name="VSeparator" type="VSeparator" parent="Control/MarginContainer/HBoxContainer/EnemyVBox/InfoPanel2/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer" unique_id=1825437868]
+layout_mode = 2
+
+[node name="Label2" type="Label" parent="Control/MarginContainer/HBoxContainer/EnemyVBox/InfoPanel2/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer" unique_id=773611718]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "HP"
+label_settings = ExtResource("3_rng56")
+horizontal_alignment = 2
+
+[node name="HpBarPlayer" type="ProgressBar" parent="Control/MarginContainer/HBoxContainer/EnemyVBox/InfoPanel2/MarginContainer/HBoxContainer/VBoxContainer" unique_id=1568356451]
+custom_minimum_size = Vector2(0, 15)
+layout_mode = 2
+value = 100.0
+show_percentage = false
+
+[node name="TextureRect" type="TextureRect" parent="Control/MarginContainer/HBoxContainer/EnemyVBox/InfoPanel2/MarginContainer/HBoxContainer" unique_id=454670672]
+layout_mode = 2
+texture = ExtResource("2_a6m4x")
+expand_mode = 2
+flip_h = true
+
+[node name="HSeparator" type="HSeparator" parent="Control/MarginContainer/HBoxContainer/EnemyVBox" unique_id=1572578593]
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Control/MarginContainer/HBoxContainer/EnemyVBox" unique_id=714626935]
+layout_mode = 2
+
+[node name="Control" type="Control" parent="Control/MarginContainer/HBoxContainer/EnemyVBox/HBoxContainer" unique_id=50432598]
+layout_mode = 2
+
+[node name="PanelContainer" type="PanelContainer" parent="Control/MarginContainer/HBoxContainer/EnemyVBox/HBoxContainer" unique_id=264110417]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="MarginContainer" type="MarginContainer" parent="Control/MarginContainer/HBoxContainer/EnemyVBox/HBoxContainer/PanelContainer" unique_id=2113527643]
+layout_mode = 2
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_right = 5
+theme_override_constants/margin_bottom = 5
