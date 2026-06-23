@@ -16,12 +16,30 @@ const RADIUS = 200.0
 @export var move_backward_btn: Button
 
 var turn_off := false
-var character : Character
 var _tween: Tween
 var _hiding := false
 var _fanned_out := false
 var _fan_hiding := false
 var _enable := true
+
+var actual_character: Character
+
+func setup(c: Character) -> void:
+	actual_character = c
+	set_delegate(c)
+
+# --- proxy methods (for subclass dispatch) ---
+
+func execute_special_attack(o: Character, bm: BattleManager) -> void:
+	actual_character.execute_special_attack(o, bm)
+
+func take_damage(damage: float) -> void:
+	actual_character.take_damage(damage)
+
+func query_move(_opponent_history: Array[Moves.Types], _distance_to_opp: int) -> Moves.Types:
+	return await query_for_input()
+
+# ---
 
 func _ready() -> void:
 	for btn in _buttons():
