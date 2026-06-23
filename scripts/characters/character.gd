@@ -19,6 +19,13 @@ var _delegate: Character = null
 func set_delegate(d: Character) -> void:
 	_delegate = d
 
+var char_name: String:
+	get: return _delegate.char_name if _delegate else _char_name
+	set(v):
+		if _delegate: _delegate.char_name = v
+		else: _char_name = v
+var _char_name: String
+
 @export var prefered_position: int:
 	get: return _delegate.prefered_position if _delegate else _prefered_position
 	set(v):
@@ -52,8 +59,16 @@ var _sprite_dict: Dictionary = {
 	Moves.Types.STAGGER: [],
 }
 
+var max_health_point : float:
+	get: return _delegate.max_health_point if _delegate else _max_health_point
+	set(v):
+		if _delegate: _delegate.max_health_point = v
+		else: _max_health_point = v
+var _max_health_point : float
+
+
 var health_point : float:
-	get: return _delegate.health_point if _delegate else health_point
+	get: return _delegate.health_point if _delegate else _health_point
 	set(v):
 		if _delegate: _delegate.health_point = v
 		else: _health_point = v

@@ -11,6 +11,7 @@ script = ExtResource("1_7uw2c")
 
 [node name="Control" type="Control" parent="." unique_id=953920951]
 layout_mode = 3
+anchor_top = -0.0001481374
 anchor_right = 1.0
 anchor_bottom = -0.0001481374
 offset_bottom = 0.09599304
@@ -68,7 +69,7 @@ label_settings = ExtResource("3_rng56")
 [node name="HBoxContainer" type="HBoxContainer" parent="Control/MarginContainer/HBoxContainer/PlayerVBox/InfoPanel/MarginContainer/HBoxContainer/VBoxContainer" unique_id=184591653]
 layout_mode = 2
 
-[node name="Label2" type="Label" parent="Control/MarginContainer/HBoxContainer/PlayerVBox/InfoPanel/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer" unique_id=627909631]
+[node name="HP" type="Label" parent="Control/MarginContainer/HBoxContainer/PlayerVBox/InfoPanel/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer" unique_id=627909631]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "HP"
@@ -77,16 +78,18 @@ label_settings = ExtResource("3_rng56")
 [node name="VSeparator" type="VSeparator" parent="Control/MarginContainer/HBoxContainer/PlayerVBox/InfoPanel/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer" unique_id=1084006966]
 layout_mode = 2
 
-[node name="LvlPlayer" type="Label" parent="Control/MarginContainer/HBoxContainer/PlayerVBox/InfoPanel/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer" unique_id=1471821821]
+[node name="HPLab" type="Label" parent="Control/MarginContainer/HBoxContainer/PlayerVBox/InfoPanel/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer" unique_id=1471821821]
 layout_mode = 2
 size_flags_horizontal = 3
-text = "Lvl. "
+text = "100 / 100"
 label_settings = ExtResource("3_rng56")
 
 [node name="HpBarPlayer" type="ProgressBar" parent="Control/MarginContainer/HBoxContainer/PlayerVBox/InfoPanel/MarginContainer/HBoxContainer/VBoxContainer" unique_id=2073718805]
 custom_minimum_size = Vector2(0, 15)
 layout_mode = 2
-value = 100.0
+max_value = 1.0
+step = 0.0
+value = 1.0
 show_percentage = false
 
 [node name="HSeparator" type="HSeparator" parent="Control/MarginContainer/HBoxContainer/PlayerVBox" unique_id=1638669417]
@@ -130,6 +133,50 @@ alignment = 2
 layout_mode = 2
 texture = ExtResource("4_rng56")
 
+[node name="TextureRect20" type="TextureRect" parent="Control/MarginContainer/HBoxContainer/PlayerVBox/HBoxContainer/PanelContainer/MarginContainer/VBoxContainer/ScrollContainer/HBoxContainer" unique_id=534069521]
+layout_mode = 2
+texture = ExtResource("4_rng56")
+
+[node name="TextureRect21" type="TextureRect" parent="Control/MarginContainer/HBoxContainer/PlayerVBox/HBoxContainer/PanelContainer/MarginContainer/VBoxContainer/ScrollContainer/HBoxContainer" unique_id=1544951101]
+layout_mode = 2
+texture = ExtResource("4_rng56")
+
+[node name="TextureRect22" type="TextureRect" parent="Control/MarginContainer/HBoxContainer/PlayerVBox/HBoxContainer/PanelContainer/MarginContainer/VBoxContainer/ScrollContainer/HBoxContainer" unique_id=444907874]
+layout_mode = 2
+texture = ExtResource("4_rng56")
+
+[node name="TextureRect23" type="TextureRect" parent="Control/MarginContainer/HBoxContainer/PlayerVBox/HBoxContainer/PanelContainer/MarginContainer/VBoxContainer/ScrollContainer/HBoxContainer" unique_id=2051117461]
+layout_mode = 2
+texture = ExtResource("4_rng56")
+
+[node name="TextureRect24" type="TextureRect" parent="Control/MarginContainer/HBoxContainer/PlayerVBox/HBoxContainer/PanelContainer/MarginContainer/VBoxContainer/ScrollContainer/HBoxContainer" unique_id=133172758]
+layout_mode = 2
+texture = ExtResource("4_rng56")
+
+[node name="TextureRect25" type="TextureRect" parent="Control/MarginContainer/HBoxContainer/PlayerVBox/HBoxContainer/PanelContainer/MarginContainer/VBoxContainer/ScrollContainer/HBoxContainer" unique_id=363720744]
+layout_mode = 2
+texture = ExtResource("4_rng56")
+
+[node name="TextureRect26" type="TextureRect" parent="Control/MarginContainer/HBoxContainer/PlayerVBox/HBoxContainer/PanelContainer/MarginContainer/VBoxContainer/ScrollContainer/HBoxContainer" unique_id=1542631388]
+layout_mode = 2
+texture = ExtResource("4_rng56")
+
+[node name="TextureRect27" type="TextureRect" parent="Control/MarginContainer/HBoxContainer/PlayerVBox/HBoxContainer/PanelContainer/MarginContainer/VBoxContainer/ScrollContainer/HBoxContainer" unique_id=1393263050]
+layout_mode = 2
+texture = ExtResource("4_rng56")
+
+[node name="TextureRect28" type="TextureRect" parent="Control/MarginContainer/HBoxContainer/PlayerVBox/HBoxContainer/PanelContainer/MarginContainer/VBoxContainer/ScrollContainer/HBoxContainer" unique_id=2018988070]
+layout_mode = 2
+texture = ExtResource("4_rng56")
+
+[node name="TextureRect29" type="TextureRect" parent="Control/MarginContainer/HBoxContainer/PlayerVBox/HBoxContainer/PanelContainer/MarginContainer/VBoxContainer/ScrollContainer/HBoxContainer" unique_id=1503592366]
+layout_mode = 2
+texture = ExtResource("4_rng56")
+
+[node name="TextureRect30" type="TextureRect" parent="Control/MarginContainer/HBoxContainer/PlayerVBox/HBoxContainer/PanelContainer/MarginContainer/VBoxContainer/ScrollContainer/HBoxContainer" unique_id=656843577]
+layout_mode = 2
+texture = ExtResource("4_rng56")
+
 [node name="Control" type="Control" parent="Control/MarginContainer/HBoxContainer" unique_id=1137003913]
 layout_mode = 2
 size_flags_horizontal = 3
@@ -165,17 +212,17 @@ horizontal_alignment = 2
 [node name="HBoxContainer" type="HBoxContainer" parent="Control/MarginContainer/HBoxContainer/EnemyVBox/InfoPanel2/MarginContainer/HBoxContainer/VBoxContainer" unique_id=1590845522]
 layout_mode = 2
 
-[node name="LvlPlayer" type="Label" parent="Control/MarginContainer/HBoxContainer/EnemyVBox/InfoPanel2/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer" unique_id=624790539]
+[node name="HPLab" type="Label" parent="Control/MarginContainer/HBoxContainer/EnemyVBox/InfoPanel2/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer" unique_id=624790539]
 layout_mode = 2
 size_flags_horizontal = 3
-text = "Lvl. "
+text = "100 / 100"
 label_settings = ExtResource("3_rng56")
 horizontal_alignment = 2
 
 [node name="VSeparator" type="VSeparator" parent="Control/MarginContainer/HBoxContainer/EnemyVBox/InfoPanel2/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer" unique_id=1825437868]
 layout_mode = 2
 
-[node name="Label2" type="Label" parent="Control/MarginContainer/HBoxContainer/EnemyVBox/InfoPanel2/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer" unique_id=773611718]
+[node name="HP" type="Label" parent="Control/MarginContainer/HBoxContainer/EnemyVBox/InfoPanel2/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer" unique_id=773611718]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "HP"
