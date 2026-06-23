@@ -34,9 +34,10 @@ var is_staggered := false:
 			_is_staggered = new
 			texture = sprite_dict[Moves.Types.STAGGER][0]
 	get: return _delegate.is_staggered if _delegate else _is_staggered
+
 var _is_staggered := false
 
-var sprite_dict: Dictionary:
+@export var sprite_dict: Dictionary:
 	get: return _delegate.sprite_dict if _delegate else _sprite_dict
 	set(v):
 		if _delegate: _delegate.sprite_dict = v
@@ -50,6 +51,13 @@ var _sprite_dict: Dictionary = {
 	Moves.Types.BACK_MV: [],
 	Moves.Types.STAGGER: [],
 }
+
+var health_point : float:
+	get: return _delegate.health_point if _delegate else health_point
+	set(v):
+		if _delegate: _delegate.health_point = v
+		else: _health_point = v
+var _health_point : float
 
 var move_history: Array[Moves.Types]:
 	get: return _delegate.move_history if _delegate else _move_history
