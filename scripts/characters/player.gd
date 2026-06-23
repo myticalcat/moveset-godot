@@ -15,6 +15,7 @@ const RADIUS = 200.0
 @export var move_forward_btn: Button
 @export var move_backward_btn: Button
 
+var turn_off := false
 var character : Character
 var _tween: Tween
 var _hiding := false
@@ -31,6 +32,7 @@ func _ready() -> void:
 	mouse_area.mouse_entered.connect(_fan_out)
 	mouse_area.mouse_exited.connect(_schedule_hide)
 	_enable = false
+	move_chosen.connect(turn_off_button)
 	special_atk_btn.pressed.connect(func(): move_chosen.emit(Moves.Types.SPECIAL_ATK))
 	light_atk_btn.pressed.connect(func(): move_chosen.emit(Moves.Types.LIGHT_ATK))
 	strong_atk_btn.pressed.connect(func(): move_chosen.emit(Moves.Types.STRONG_ATK))
@@ -43,6 +45,12 @@ func query_for_input() -> Moves.Types:
 	var move: Moves.Types = await move_chosen
 	_enable = false
 	return move
+
+func turn_off_button():
+	turn_off = true
+
+func turn_on_button():
+	turn_off = false
 
 func _buttons() -> Array[Button]:
 	return [special_atk_btn, light_atk_btn, strong_atk_btn,
@@ -59,6 +67,9 @@ func _schedule_hide() -> void:
 		_fan_hide()
 
 func _fan_out() -> void:
+	if turn_off:
+		return
+
 	_hiding = false
 	if _fanned_out:
 		return
