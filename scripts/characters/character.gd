@@ -39,7 +39,7 @@ var is_staggered := false:
 			_delegate.is_staggered = new
 		else:
 			_is_staggered = new
-			texture = sprite_dict[Moves.Types.STAGGER][0]
+			# texture = sprite_dict[Moves.Types.STAGGER][0]
 	get: return _delegate.is_staggered if _delegate else _is_staggered
 
 var _is_staggered := false

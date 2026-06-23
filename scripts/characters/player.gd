@@ -26,7 +26,7 @@ var actual_character: Character
 
 func setup(c: Character) -> void:
 	actual_character = c
-	set_delegate(c)
+	self.set_delegate(c)
 
 # --- proxy methods (for subclass dispatch) ---
 

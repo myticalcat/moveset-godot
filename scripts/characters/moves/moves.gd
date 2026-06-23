@@ -10,6 +10,18 @@ enum Types{
 	STAGGER,
 }
 
+static var texture_type = {
+	Types.LIGHT_ATK : preload("res://assets/32_lt_ak.jpg"),
+	Types.STRONG_ATK : preload("res://assets/32_st_ak.jpg"),
+	Types.SPECIAL_ATK : preload("res://assets/32_sp_ak.jpg"),
+	Types.BACK_MV : preload("res://assets/32_bw_mv.jpg"),
+	Types.FORW_MV : preload("res://assets/32_fw_mv.jpg"),
+	Types.PARRY : preload("res://assets/32_pr.jpg"),
+}
+
+static func type_to_texture(mv : Types) -> Texture2D:
+	return texture_type[mv]
+	
 static func type_to_string(mv : Moves.Types):
 	return{
 		Types.LIGHT_ATK : "lt_atk",

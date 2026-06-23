@@ -6,14 +6,28 @@
 [ext_resource type="LabelSettings" uid="uid://bnnf43mt36kr6" path="res://theme/label_ui_info.tres" id="3_rng56"]
 [ext_resource type="Texture2D" uid="uid://bc5rebjcoal70" path="res://assets/32_atk.jpg" id="4_rng56"]
 
-[node name="UIBattle" type="CanvasLayer" unique_id=1112870766]
+[node name="UIBattle" type="CanvasLayer" unique_id=1112870766 node_paths=PackedStringArray("l_name", "l_hp_lab", "l_hp_prg", "l_mv_hst", "l_mv_srl", "r_name", "r_hp_lab", "r_hp_prg", "r_mv_hst", "next_pred_mv", "next_pred_cl", "next_pred_tx")]
+scale = Vector2(0.6, 0.6)
+transform = Transform2D(0.6, 0, 0, 0.6, 0, 0)
 script = ExtResource("1_7uw2c")
+l_name = NodePath("Control/MarginContainer/HBoxContainer/PlayerVBox/InfoPanel/MarginContainer/HBoxContainer/VBoxContainer/PlayerName")
+l_hp_lab = NodePath("Control/MarginContainer/HBoxContainer/PlayerVBox/InfoPanel/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer/HPLab")
+l_hp_prg = NodePath("Control/MarginContainer/HBoxContainer/PlayerVBox/InfoPanel/MarginContainer/HBoxContainer/VBoxContainer/HpBarPlayer")
+l_mv_hst = NodePath("Control/MarginContainer/HBoxContainer/PlayerVBox/HBoxContainer/PanelContainer/MarginContainer/VBoxContainer/ScrollContainer/HBoxContainer")
+l_mv_srl = NodePath("Control/MarginContainer/HBoxContainer/PlayerVBox/HBoxContainer/PanelContainer/MarginContainer/VBoxContainer/ScrollContainer")
+r_name = NodePath("Control/MarginContainer/HBoxContainer/EnemyVBox/InfoPanel2/MarginContainer/HBoxContainer/VBoxContainer/PlayerName")
+r_hp_lab = NodePath("Control/MarginContainer/HBoxContainer/EnemyVBox/InfoPanel2/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer/HPLab")
+r_hp_prg = NodePath("Control/MarginContainer/HBoxContainer/EnemyVBox/InfoPanel2/MarginContainer/HBoxContainer/VBoxContainer/HpBarPlayer")
+r_mv_hst = NodePath("Control/MarginContainer/HBoxContainer/EnemyVBox/HBoxContainer/PanelContainer/VBoxContainer/MarginContainer2/VBoxContainer/ScrollContainer/HBoxContainer")
+next_pred_mv = NodePath("Control/MarginContainer/HBoxContainer/EnemyVBox/HBoxContainer/PanelContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer/NextMoves")
+next_pred_cl = NodePath("Control/MarginContainer/HBoxContainer/EnemyVBox/HBoxContainer/PanelContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer/Confidence")
+next_pred_tx = NodePath("Control/MarginContainer/HBoxContainer/EnemyVBox/HBoxContainer/PanelContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer/TextureRect")
 
 [node name="Control" type="Control" parent="." unique_id=953920951]
 layout_mode = 3
 anchor_top = -0.0001481374
-anchor_right = 1.0
-anchor_bottom = -0.0001481374
+anchor_right = 1.6710069
+anchor_bottom = -0.0002962748
 offset_bottom = 0.09599304
 grow_horizontal = 2
 size_flags_horizontal = 3
@@ -23,7 +37,10 @@ metadata/_edit_use_anchors_ = true
 layout_mode = 1
 anchors_preset = -1
 anchor_right = 1.0
-offset_bottom = 176.24
+offset_left = -2.4999998
+offset_top = 2.5959892
+offset_right = -2.5
+offset_bottom = 247.596
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_constants/margin_left = 10
@@ -254,9 +271,107 @@ layout_mode = 2
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="MarginContainer" type="MarginContainer" parent="Control/MarginContainer/HBoxContainer/EnemyVBox/HBoxContainer/PanelContainer" unique_id=2113527643]
+[node name="VBoxContainer" type="VBoxContainer" parent="Control/MarginContainer/HBoxContainer/EnemyVBox/HBoxContainer/PanelContainer" unique_id=1280115813]
+layout_mode = 2
+
+[node name="MarginContainer2" type="MarginContainer" parent="Control/MarginContainer/HBoxContainer/EnemyVBox/HBoxContainer/PanelContainer/VBoxContainer" unique_id=388440655]
 layout_mode = 2
 theme_override_constants/margin_left = 5
 theme_override_constants/margin_top = 5
 theme_override_constants/margin_right = 5
 theme_override_constants/margin_bottom = 5
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Control/MarginContainer/HBoxContainer/EnemyVBox/HBoxContainer/PanelContainer/VBoxContainer/MarginContainer2" unique_id=773985001]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Control/MarginContainer/HBoxContainer/EnemyVBox/HBoxContainer/PanelContainer/VBoxContainer/MarginContainer2/VBoxContainer" unique_id=1986105310]
+layout_mode = 2
+text = "Moves History"
+label_settings = ExtResource("3_6ya20")
+horizontal_alignment = 2
+
+[node name="ScrollContainer" type="ScrollContainer" parent="Control/MarginContainer/HBoxContainer/EnemyVBox/HBoxContainer/PanelContainer/VBoxContainer/MarginContainer2/VBoxContainer" unique_id=1625568769]
+custom_minimum_size = Vector2(0, 45)
+layout_mode = 2
+size_flags_vertical = 3
+horizontal_scroll_mode = 4
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Control/MarginContainer/HBoxContainer/EnemyVBox/HBoxContainer/PanelContainer/VBoxContainer/MarginContainer2/VBoxContainer/ScrollContainer" unique_id=2072071734]
+layout_mode = 2
+size_flags_horizontal = 3
+alignment = 2
+
+[node name="TextureRect19" type="TextureRect" parent="Control/MarginContainer/HBoxContainer/EnemyVBox/HBoxContainer/PanelContainer/VBoxContainer/MarginContainer2/VBoxContainer/ScrollContainer/HBoxContainer" unique_id=913147374]
+layout_mode = 2
+texture = ExtResource("4_rng56")
+
+[node name="TextureRect20" type="TextureRect" parent="Control/MarginContainer/HBoxContainer/EnemyVBox/HBoxContainer/PanelContainer/VBoxContainer/MarginContainer2/VBoxContainer/ScrollContainer/HBoxContainer" unique_id=548981367]
+layout_mode = 2
+texture = ExtResource("4_rng56")
+
+[node name="TextureRect21" type="TextureRect" parent="Control/MarginContainer/HBoxContainer/EnemyVBox/HBoxContainer/PanelContainer/VBoxContainer/MarginContainer2/VBoxContainer/ScrollContainer/HBoxContainer" unique_id=1517127203]
+layout_mode = 2
+texture = ExtResource("4_rng56")
+
+[node name="TextureRect22" type="TextureRect" parent="Control/MarginContainer/HBoxContainer/EnemyVBox/HBoxContainer/PanelContainer/VBoxContainer/MarginContainer2/VBoxContainer/ScrollContainer/HBoxContainer" unique_id=38861276]
+layout_mode = 2
+texture = ExtResource("4_rng56")
+
+[node name="TextureRect23" type="TextureRect" parent="Control/MarginContainer/HBoxContainer/EnemyVBox/HBoxContainer/PanelContainer/VBoxContainer/MarginContainer2/VBoxContainer/ScrollContainer/HBoxContainer" unique_id=419826055]
+layout_mode = 2
+texture = ExtResource("4_rng56")
+
+[node name="TextureRect24" type="TextureRect" parent="Control/MarginContainer/HBoxContainer/EnemyVBox/HBoxContainer/PanelContainer/VBoxContainer/MarginContainer2/VBoxContainer/ScrollContainer/HBoxContainer" unique_id=1752241230]
+layout_mode = 2
+texture = ExtResource("4_rng56")
+
+[node name="TextureRect25" type="TextureRect" parent="Control/MarginContainer/HBoxContainer/EnemyVBox/HBoxContainer/PanelContainer/VBoxContainer/MarginContainer2/VBoxContainer/ScrollContainer/HBoxContainer" unique_id=1374810283]
+layout_mode = 2
+texture = ExtResource("4_rng56")
+
+[node name="TextureRect26" type="TextureRect" parent="Control/MarginContainer/HBoxContainer/EnemyVBox/HBoxContainer/PanelContainer/VBoxContainer/MarginContainer2/VBoxContainer/ScrollContainer/HBoxContainer" unique_id=1596976610]
+layout_mode = 2
+texture = ExtResource("4_rng56")
+
+[node name="TextureRect27" type="TextureRect" parent="Control/MarginContainer/HBoxContainer/EnemyVBox/HBoxContainer/PanelContainer/VBoxContainer/MarginContainer2/VBoxContainer/ScrollContainer/HBoxContainer" unique_id=1268164126]
+layout_mode = 2
+texture = ExtResource("4_rng56")
+
+[node name="TextureRect28" type="TextureRect" parent="Control/MarginContainer/HBoxContainer/EnemyVBox/HBoxContainer/PanelContainer/VBoxContainer/MarginContainer2/VBoxContainer/ScrollContainer/HBoxContainer" unique_id=1873583067]
+layout_mode = 2
+texture = ExtResource("4_rng56")
+
+[node name="TextureRect29" type="TextureRect" parent="Control/MarginContainer/HBoxContainer/EnemyVBox/HBoxContainer/PanelContainer/VBoxContainer/MarginContainer2/VBoxContainer/ScrollContainer/HBoxContainer" unique_id=1535340986]
+layout_mode = 2
+texture = ExtResource("4_rng56")
+
+[node name="TextureRect30" type="TextureRect" parent="Control/MarginContainer/HBoxContainer/EnemyVBox/HBoxContainer/PanelContainer/VBoxContainer/MarginContainer2/VBoxContainer/ScrollContainer/HBoxContainer" unique_id=251038379]
+layout_mode = 2
+texture = ExtResource("4_rng56")
+
+[node name="Label2" type="Label" parent="Control/MarginContainer/HBoxContainer/EnemyVBox/HBoxContainer/PanelContainer/VBoxContainer/MarginContainer2/VBoxContainer" unique_id=89830961]
+layout_mode = 2
+text = "Moves Prediction"
+label_settings = ExtResource("3_6ya20")
+horizontal_alignment = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Control/MarginContainer/HBoxContainer/EnemyVBox/HBoxContainer/PanelContainer/VBoxContainer/MarginContainer2/VBoxContainer" unique_id=276840219]
+custom_minimum_size = Vector2(0, 45)
+layout_mode = 2
+alignment = 2
+
+[node name="Confidence" type="Label" parent="Control/MarginContainer/HBoxContainer/EnemyVBox/HBoxContainer/PanelContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer" unique_id=292482165]
+layout_mode = 2
+text = "Confidence: "
+
+[node name="VSeparator" type="VSeparator" parent="Control/MarginContainer/HBoxContainer/EnemyVBox/HBoxContainer/PanelContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer" unique_id=1613399954]
+layout_mode = 2
+
+[node name="NextMoves" type="Label" parent="Control/MarginContainer/HBoxContainer/EnemyVBox/HBoxContainer/PanelContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer" unique_id=231340668]
+layout_mode = 2
+text = "Next Moves: "
+
+[node name="TextureRect" type="TextureRect" parent="Control/MarginContainer/HBoxContainer/EnemyVBox/HBoxContainer/PanelContainer/VBoxContainer/MarginContainer2/VBoxContainer/HBoxContainer" unique_id=1154840231]
+layout_mode = 2
+texture = ExtResource("4_rng56")
+expand_mode = 2

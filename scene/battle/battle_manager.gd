@@ -10,6 +10,8 @@ var arena_size = 9
 
 @export var player : Player
 @export var enemy : Character
+@export var ui : UIBattle
+@export var wait_time_between := 1.0
 var character_pos : Dictionary = {}
 var _move_tweens : Dictionary = {}
 
@@ -31,7 +33,14 @@ func _ready() -> void:
 	if debug == true:
 		player.chipset = NokaiFlip.new()
 		enemy.chipset = NokaiFlip.new()
-		start_game(player, enemy)
+		player.str_stat = 10
+		player.agi_stat = 20
+		player.int_stat = 10
+		player.health_point = player.str_stat * 100
+		enemy.health_point = enemy.str_stat * 100
+	ui.setup(player, enemy)
+	start_game(player, enemy)
+
 		
 func start_game(player_new : Player, enemy_new: Character):
 	self.player = player_new
@@ -72,23 +81,31 @@ func start_round():
 		if player_spd == enemy_spd:
 			if randf() < 0.6:
 				resolve_moves(player, enemy, player_mv, enemy_mv, true)
-				await get_tree().create_timer(0.1).timeout
+				await get_tree().create_timer(wait_time_between).timeout
 				resolve_moves(enemy, player, enemy_mv, player_mv, false)
 			else:
 				resolve_moves(enemy, player, enemy_mv, player_mv, true)
-				await get_tree().create_timer(0.1).timeout
+				await get_tree().create_timer(wait_time_between).timeout
 				resolve_moves(player, enemy, player_mv, enemy_mv, false)
 		elif player_spd > enemy_spd:
 			resolve_moves(player, enemy, player_mv, enemy_mv, true)
-			await get_tree().create_timer(0.1).timeout
+			await get_tree().create_timer(wait_time_between).timeout
 			resolve_moves(enemy, player, enemy_mv, player_mv, false)
 		else:
 			resolve_moves(enemy, player, enemy_mv, player_mv, true)
-			await get_tree().create_timer(0.1).timeout
+			await get_tree().create_timer(wait_time_between).timeout
 			resolve_moves(player, enemy, player_mv, enemy_mv, false)
+
+		if enemy.is_staggered:
+			enemy.is_staggered = false
+		
+		if player.is_staggered:
+			enemy.is_staggered = false
 
 
 func resolve_moves(actor : Character, subject : Character, mv : Moves.Types, subject_mv : Moves.Types, moved_first : bool):
+	if mv == Moves.Types.STAGGER:
+		return
 
 	actor.add_to_history(mv)
 
@@ -107,8 +124,6 @@ func resolve_moves(actor : Character, subject : Character, mv : Moves.Types, sub
 	if mv == Moves.Types.PARRY:
 		print("parry")
 		resolve_parry(actor, subject, subject_mv, moved_first)
-	if mv == Moves.Types.STAGGER:
-		pass
 
 func resolve_parry(_actor : Character, subject : Character, subject_mv : Moves.Types, moved_first : bool):
 	if moved_first and subject_mv == Moves.Types.LIGHT_ATK:
