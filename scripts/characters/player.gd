@@ -32,7 +32,6 @@ func _ready() -> void:
 	mouse_area.mouse_entered.connect(_fan_out)
 	mouse_area.mouse_exited.connect(_schedule_hide)
 	_enable = false
-	move_chosen.connect(turn_off_button)
 	special_atk_btn.pressed.connect(func(): move_chosen.emit(Moves.Types.SPECIAL_ATK))
 	light_atk_btn.pressed.connect(func(): move_chosen.emit(Moves.Types.LIGHT_ATK))
 	strong_atk_btn.pressed.connect(func(): move_chosen.emit(Moves.Types.STRONG_ATK))
@@ -43,11 +42,13 @@ func _ready() -> void:
 func query_for_input() -> Moves.Types:
 	_enable = true
 	var move: Moves.Types = await move_chosen
+	turn_off_button()
 	_enable = false
 	return move
 
 func turn_off_button():
 	turn_off = true
+	_fan_hide()
 
 func turn_on_button():
 	turn_off = false

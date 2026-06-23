@@ -63,7 +63,6 @@ func start_round():
 			player.turn_on_button()
 			player_mv = await player.query_for_input()
 
-
 		player.is_staggered = false
 		enemy.is_staggered = false
 
