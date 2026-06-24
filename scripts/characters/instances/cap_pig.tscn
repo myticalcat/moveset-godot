@@ -1,0 +1,79 @@
+[gd_scene format=3 uid="uid://bxwbnahqio4d0"]
+
+[ext_resource type="Texture2D" uid="uid://cke82cbm6opt1" path="res://assets/characters/cap-pig/cap pig idle.png" id="1_vwlfu"]
+[ext_resource type="Script" uid="uid://bd8hgcm4a03do" path="res://scripts/characters/instances/cap_pig.gd" id="2_r87sc"]
+[ext_resource type="Texture2D" uid="uid://br8h1rfnckg2u" path="res://assets/characters/cap-pig/cap pig light attack.png" id="3_e2npv"]
+[ext_resource type="Texture2D" uid="uid://cai4qq5oe0jxs" path="res://assets/characters/cap-pig/cap pig heavy attack.png" id="4_h507u"]
+[ext_resource type="Texture2D" uid="uid://gqaxqqr17uph" path="res://assets/characters/cap-pig/cap pig special attack.png" id="5_uthjb"]
+[ext_resource type="Texture2D" uid="uid://dtvcxqjsfkr4q" path="res://assets/characters/cap-pig/cap pig counter.png" id="6_qejc6"]
+[ext_resource type="Texture2D" uid="uid://djgnwlw1cmmrm" path="res://assets/characters/cap-pig/cap pig mv forward.png" id="7_1b1yd"]
+[ext_resource type="Texture2D" uid="uid://18y780fs3cd5" path="res://assets/characters/cap-pig/cap pig mv back.png" id="8_585to"]
+[ext_resource type="Texture2D" uid="uid://crok28885001k" path="res://assets/characters/cap-pig/cap pig get hit.png" id="9_32aab"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_ay4uy"]
+radius = 83.21658
+
+[node name="CapitalistPig" type="Sprite2D" unique_id=362625524]
+texture = ExtResource("1_vwlfu")
+script = ExtResource("2_r87sc")
+char_name = "Capitalist Pig"
+light_atk_sprite = Array[Texture2D]([ExtResource("3_e2npv")])
+strong_atk_sprite = Array[Texture2D]([ExtResource("4_h507u")])
+special_atk_sprite = Array[Texture2D]([ExtResource("5_uthjb")])
+parry_atk_sprite = Array[Texture2D]([ExtResource("6_qejc6")])
+forward_sprite = Array[Texture2D]([ExtResource("7_1b1yd")])
+backward_sprite = Array[Texture2D]([ExtResource("8_585to")])
+idle_sprite = Array[Texture2D]([ExtResource("1_vwlfu")])
+stagger_sprite = Array[Texture2D]([ExtResource("9_32aab")])
+
+[node name="Area2D" type="Area2D" parent="." unique_id=1186869658]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D" unique_id=1337591064]
+shape = SubResource("CircleShape2D_ay4uy")
+
+[node name="LightAtk" type="Button" parent="." unique_id=1641766367]
+z_index = 1
+offset_left = 114.0
+offset_top = -30.0
+offset_right = 264.0
+offset_bottom = 30.0
+mouse_filter = 1
+text = "Light Attack"
+
+[node name="Special Attack" type="Button" parent="." unique_id=1497040055]
+z_index = 1
+offset_top = 100.0
+offset_right = 150.0
+offset_bottom = 160.0
+text = "Special Attack"
+
+[node name="Strong Attack" type="Button" parent="." unique_id=663484649]
+z_index = 1
+offset_top = -181.0
+offset_right = 150.0
+offset_bottom = -121.0
+text = "Strong Attack"
+
+[node name="Parry" type="Button" parent="." unique_id=2062538806]
+z_index = 1
+offset_left = -202.0
+offset_top = -181.0
+offset_right = -52.0
+offset_bottom = -121.0
+text = "Parry"
+
+[node name="Move Forward" type="Button" parent="." unique_id=1916192158]
+z_index = 1
+offset_left = -363.0
+offset_top = -93.0
+offset_right = -213.0
+offset_bottom = -33.0
+text = "Move Forward"
+
+[node name="Move Backward" type="Button" parent="." unique_id=1833445160]
+z_index = 1
+offset_left = -250.0
+offset_top = 61.0
+offset_right = -100.0
+offset_bottom = 121.0
+text = "Move Backward"

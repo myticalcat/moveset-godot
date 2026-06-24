@@ -16,7 +16,7 @@ enum Direction{
 	RIGHT,
 }
 
-@export var is_interactive: bool = false:
+@export var is_interactive: bool = true:
 	set(v):
 		if v == false:
 			collision.queue_free()
@@ -33,8 +33,8 @@ enum Direction{
 				btn.mouse_entered.connect(_cancel_hide)
 				btn.mouse_exited.connect(_schedule_hide)
 			collision.shape.radius = self.texture.get_width() * 3.0 / 4
-			mouse_area.mouse_entered.connect(_fan_out)
-			mouse_area.mouse_exited.connect(_schedule_hide)
+			mouse_area.mouse_entered.connect(func(): _in_main_area = true; _fan_out())
+			mouse_area.mouse_exited.connect(func(): _in_main_area = false; _schedule_hide())
 			special_atk_btn.pressed.connect(func(): move_chosen.emit(Moves.Types.SPECIAL_ATK))
 			light_atk_btn.pressed.connect(func(): move_chosen.emit(Moves.Types.LIGHT_ATK))
 			strong_atk_btn.pressed.connect(func(): move_chosen.emit(Moves.Types.STRONG_ATK))
@@ -44,14 +44,14 @@ enum Direction{
 
 		is_interactive = v
 		
-@export var collision: CollisionShape2D
-@export var mouse_area: Area2D
-@export var special_atk_btn: Button
-@export var light_atk_btn: Button
-@export var strong_atk_btn: Button
-@export var parry_btn: Button
-@export var move_forward_btn: Button
-@export var move_backward_btn: Button
+@onready var collision: CollisionShape2D = $Area2D/CollisionShape2D
+@onready var mouse_area: Area2D = $Area2D
+@onready var special_atk_btn: Button = $"Special Attack"
+@onready var light_atk_btn: Button = $LightAtk
+@onready var strong_atk_btn: Button = $"Strong Attack"
+@onready var parry_btn: Button = $Parry
+@onready var move_forward_btn: Button = $"Move Forward"
+@onready var move_backward_btn: Button = $"Move Backward"  
 
 var turn_off := false
 var _tween: Tween
@@ -59,25 +59,26 @@ var _hiding := false
 var _fanned_out := false
 var _fan_hiding := false
 var _enable := false
+var _in_main_area := false
+var _hide_id := 0
 
 const RADIUS = 200.0
 
-var char_name: String
+@export var char_name: String
 
-@export var prefered_position: int = 0
 
 var is_staggered := false
 var is_dead := false
 
-@export var sprite_dict: Dictionary = {
-	Moves.Types.LIGHT_ATK: [],
-	Moves.Types.STRONG_ATK: [],
-	Moves.Types.SPECIAL_ATK: [],
-	Moves.Types.PARRY: [],
-	Moves.Types.FORW_MV: [],
-	Moves.Types.BACK_MV: [],
-	Moves.Types.STAGGER: [],
-}
+@export_category('sprite')
+@export var light_atk_sprite : Array[Texture2D] = []
+@export var strong_atk_sprite : Array[Texture2D] = []
+@export var special_atk_sprite : Array[Texture2D] = []
+@export var parry_atk_sprite : Array[Texture2D] = []
+@export var forward_sprite : Array[Texture2D] = []
+@export var backward_sprite : Array[Texture2D] = []
+@export var idle_sprite : Array[Texture2D] = []
+@export var stagger_sprite : Array[Texture2D] = []
 
 var max_health_point: float
 var health_point: float
@@ -85,39 +86,40 @@ var move_history: Array[Moves.Types] = []
 var chipset: Chipset
 var conditions: Array[Condition] = []
 
+@export_category('stat')
 @export var agi_stat: float = 0.0
 @export var str_stat: float = 0.0
 @export var int_stat: float = 0.0
+
+@export var prefered_position: int = 2
 
 @export var light_atk_range: int = 0
 @export var strong_atk_range: int = 0
 @export var move_range: int = 1
 
+@export_category('offset')
+@export var light_atk_offset : Array[Vector2] = []
+@export var strong_atk_offset : Array[Vector2] = []
+@export var special_atk_offset : Array[Vector2] = []
+@export var parry_atk_offset : Array[Vector2] = []
+@export var forward_offset : Array[Vector2] = []
+@export var backward_offset : Array[Vector2] = []
+@export var idle_offset : Array[Vector2] = []
+@export var stagger_offset : Array[Vector2] = []
+var default_offset : Vector2
+
+
 var side: Direction:
 	set(dir):
 		_side = dir
-		flip_h = dir == Direction.LEFT
+		flip_h = dir == Direction.RIGHT
 	get: return _side
-var _side := Direction.RIGHT
+var _side := Direction.LEFT
 
 
 func _ready() -> void:
-	if not is_interactive:
-		return
-	for btn in _buttons():
-		btn.visible = false
-		btn.mouse_entered.connect(_cancel_hide)
-		btn.mouse_exited.connect(_schedule_hide)
-	collision.shape.radius = self.texture.get_width() * 3.0 / 4
-	mouse_area.mouse_entered.connect(_fan_out)
-	mouse_area.mouse_exited.connect(_schedule_hide)
-	special_atk_btn.pressed.connect(func(): move_chosen.emit(Moves.Types.SPECIAL_ATK))
-	light_atk_btn.pressed.connect(func(): move_chosen.emit(Moves.Types.LIGHT_ATK))
-	strong_atk_btn.pressed.connect(func(): move_chosen.emit(Moves.Types.STRONG_ATK))
-	parry_btn.pressed.connect(func(): move_chosen.emit(Moves.Types.PARRY))
-	move_forward_btn.pressed.connect(func(): move_chosen.emit(Moves.Types.FORW_MV))
-	move_backward_btn.pressed.connect(func(): move_chosen.emit(Moves.Types.BACK_MV))
-
+	self.default_offset = self.offset
+	self.texture = idle_sprite[0]
 
 func execute_special_attack(_o: Character, _bm: BattleManager):
 	pass
@@ -148,6 +150,7 @@ func take_damage(damage: float):
 func query_move(_opponent_history: Array[Moves.Types], _distance_to_opp: int) -> Moves.Types:
 	if is_interactive:
 		turn_on_button()
+		_fan_out()
 		return await query_for_input()
 	return Moves.Types.FORW_MV
 
@@ -178,11 +181,14 @@ func _buttons() -> Array[Button]:
 func _cancel_hide() -> void:
 	_hiding = false
 	_fan_hiding = false
+	_hide_id += 1
 
 func _schedule_hide() -> void:
 	_hiding = true
-	await get_tree().create_timer(0.4).timeout
-	if _hiding and not _fan_hiding:
+	_hide_id += 1
+	var my_id := _hide_id
+	await get_tree().create_timer(0.3).timeout
+	if _hiding and not _fan_hiding and my_id == _hide_id and not _in_main_area:
 		_fan_hide()
 
 func _fan_out() -> void:
@@ -196,7 +202,7 @@ func _fan_out() -> void:
 		_tween.kill()
 	_tween = create_tween().set_parallel(true)
 	var buttons := _buttons()
-	collision.shape.radius = RADIUS + buttons[0].size.length() / 2.0
+	collision.shape.radius = (RADIUS + buttons[0].size.length() / 2.0) + 100
 	for i in buttons.size():
 		var angle := i * (TAU / buttons.size())
 		var target := (Vector2(cos(angle), sin(angle)) * RADIUS) - buttons[i].size / 2.0

@@ -14,6 +14,8 @@ var arena_size = 9
 @export var wait_time_between := 1.0
 var character_pos : Dictionary = {}
 var _move_tweens : Dictionary = {}
+var _camera_tween: Tween
+var _impact_tween: Tween
 
 var arena_mid_point : Array[int] = [
 	-1000,
@@ -58,6 +60,7 @@ func start_game(player_new : Character, enemy_new: Character):
 	player.global_position = Vector2(arena_mid_point[character_pos[player]], 0)
 	enemy.global_position = Vector2(arena_mid_point[character_pos[enemy]], 0)
 
+	_update_camera()
 	start_round()
 
 func start_round():
@@ -103,7 +106,7 @@ func start_round():
 
 
 func resolve_moves(actor : Character, subject : Character, mv : Moves.Types, subject_mv : Moves.Types, moved_first : bool):
-	if mv == Moves.Types.STAGGER:
+	if mv == Moves.Types.STAGGER or actor.is_staggered:
 		return
 
 	actor.add_to_history(mv)
@@ -124,11 +127,41 @@ func resolve_moves(actor : Character, subject : Character, mv : Moves.Types, sub
 		print("parry")
 		resolve_parry(actor, subject, subject_mv, moved_first)
 
-func resolve_parry(_actor : Character, subject : Character, subject_mv : Moves.Types, moved_first : bool):
+func _camera_impact(actor: Character) -> void:
+	var dir := 1.0 if actor.side == Character.Direction.LEFT else -1.0
+	var impact_pos := Vector2(camera.position.x + dir * 60.0, camera.position.y)
+
+	if _impact_tween:
+		_impact_tween.kill()
+	_impact_tween = create_tween()
+	_impact_tween.tween_property(camera, "position", impact_pos, 0.08) \
+		.set_trans(Tween.TRANS_EXPO).set_ease(Tween.EASE_OUT)
+	for i in 4:
+		var shake := impact_pos + Vector2(randf_range(-18.0, 18.0), randf_range(-10.0, 10.0))
+		_impact_tween.tween_property(camera, "position", shake, 0.05)
+	var p1_x := float(arena_mid_point[character_pos[player]])
+	var p2_x := float(arena_mid_point[character_pos[enemy]])
+	var mid_x := (p1_x + p2_x) / 2.0
+	_impact_tween.tween_property(camera, "position", Vector2(mid_x, camera.position.y), 0.5) \
+		.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+
+func _apply_sprite(actor: Character, sprites: Array, offsets: Array, index: int) -> void:
+	actor.texture = sprites[index]
+	if len(offsets) != 0:
+		var off: Vector2 = offsets[index]
+		actor.offset = Vector2(-off.x if actor.flip_h else off.x, off.y)
+	else:
+		actor.offset = actor.default_offset
+
+func resolve_parry(actor : Character, subject : Character, subject_mv : Moves.Types, moved_first : bool):
+	_apply_sprite(actor, actor.parry_atk_sprite, actor.parry_atk_offset, -1)
+
 	if moved_first and subject_mv == Moves.Types.LIGHT_ATK:
 		subject.is_staggered = true
 
 func resolve_light_attack(actor : Character, subject : Character):
+	_apply_sprite(actor, actor.light_atk_sprite, actor.light_atk_offset, 0)
+
 	var attack_range = actor.light_atk_range
 	var conditions : Array[Condition] = []
 	conditions.append_array(actor.conditions)
@@ -146,7 +179,12 @@ func resolve_light_attack(actor : Character, subject : Character):
 
 		subject.take_damage(damage)
 
+	_apply_sprite(actor, actor.light_atk_sprite, actor.light_atk_offset, -1)
+	_camera_impact(actor)
+
 func resolve_strong_attack(actor : Character, subject : Character):
+	_apply_sprite(actor, actor.strong_atk_sprite, actor.strong_atk_offset, 0)
+	
 	var attack_range = actor.strong_atk_range
 	var conditions : Array[Condition] = []
 	conditions.append_array(actor.conditions)
@@ -163,6 +201,9 @@ func resolve_strong_attack(actor : Character, subject : Character):
 		], conditions)
 
 		subject.take_damage(damage)
+
+	_apply_sprite(actor, actor.strong_atk_sprite, actor.strong_atk_offset, -1)
+	_camera_impact(actor)
 
 func resolves_number(base : float, active_type : Array[Condition.ACTV_TYPE], conditions : Array[Condition]) -> float:
 	conditions.sort_custom(func (a : Condition ,b : Condition) : return a.priority > b.priority)
@@ -195,14 +236,22 @@ func resolve_step(actor : Character, mv : Moves.Types):
 	var movement : int
 
 	if mv == Moves.Types.BACK_MV:
+
+		_apply_sprite(actor, actor.backward_sprite, actor.backward_offset, -1)
+	
 		movement = actor.get_movement_backward()
+
 	if mv == Moves.Types.FORW_MV:
+
+		_apply_sprite(actor, actor.forward_sprite, actor.forward_offset, -1)
+
 		movement = actor.get_movement_forward()
 
 	var move_to = character_pos[actor] + movement
 	move_to = min(max(move_to, 0), arena_size)
 
 	character_pos[actor] = move_to
+	_update_camera()
 
 	if character_pos[player] > character_pos[enemy]:
 		player.side = Character.Direction.RIGHT
@@ -217,6 +266,7 @@ func resolve_step(actor : Character, mv : Moves.Types):
 	_move_tweens[actor] = tween
 	tween.tween_property(actor, "global_position", Vector2(arena_mid_point[move_to], 0), 0.3)\
 		.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+	_update_camera()
 
 
 func speed(c : Character, move : Moves.Types) -> float:
@@ -242,3 +292,21 @@ func move_base_speed(move : Moves.Types, agi : float) -> float:
 
 func get_distance_char() -> int:
 	return abs(character_pos[player] - character_pos[enemy])
+
+
+func _update_camera() -> void:
+	var p1_x := float(arena_mid_point[character_pos[player]])
+	var p2_x := float(arena_mid_point[character_pos[enemy]])
+	var mid_x := (p1_x + p2_x) / 2.0
+	var dist = abs(p1_x - p2_x)
+
+	var viewport_width := get_viewport().get_visible_rect().size.x
+	var target_zoom: float = clampf(viewport_width / (dist + 600.0), 0.4, 1)
+
+	if _camera_tween:
+		_camera_tween.kill()
+	_camera_tween = create_tween().set_parallel(true)
+	_camera_tween.tween_property(camera, "position", Vector2(mid_x, camera.position.y), 0.3) \
+		.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+	_camera_tween.tween_property(camera, "zoom", Vector2(target_zoom, target_zoom), 0.3) \
+		.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)

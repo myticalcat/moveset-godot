@@ -1,0 +1,86 @@
+[gd_scene format=3 uid="uid://b77ogv4ikruo5"]
+
+[ext_resource type="Texture2D" uid="uid://b5id12fsmuiwq" path="res://assets/characters/slim-lady/slim_lady_heavy.png" id="1_4iolv"]
+[ext_resource type="Script" uid="uid://bx4bd6yvm1sg" path="res://scripts/characters/instances/slim_lady.gd" id="2_ot63u"]
+[ext_resource type="Texture2D" uid="uid://patwxojx8orn" path="res://assets/characters/slim-lady/slim_lady_light.png" id="3_qikhw"]
+[ext_resource type="Texture2D" uid="uid://deg4345t74gy2" path="res://assets/characters/slim-lady/slim_lady_special.png" id="4_lbqtu"]
+[ext_resource type="Texture2D" uid="uid://bmay3svqg2occ" path="res://assets/characters/slim-lady/slim_lady_parry.png" id="5_lthf4"]
+[ext_resource type="Texture2D" uid="uid://bqvwfexl7v8tp" path="res://assets/characters/slim-lady/slim_lady_forward.png" id="6_sdju5"]
+[ext_resource type="Texture2D" uid="uid://2wljtaabneca" path="res://assets/characters/slim-lady/slim_lady_backward.png" id="7_hja7u"]
+[ext_resource type="Texture2D" uid="uid://bqwadryc780ad" path="res://assets/characters/slim-lady/slim_lady_idle.png" id="8_bxbhw"]
+[ext_resource type="Texture2D" uid="uid://c6b6pc2ynybe" path="res://assets/characters/slim-lady/slim_lady_stagger.png" id="9_4qbrh"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_ay4uy"]
+radius = 83.21658
+
+[node name="SlimLady" type="Sprite2D" unique_id=362625524]
+texture = ExtResource("1_4iolv")
+script = ExtResource("2_ot63u")
+char_name = "Slim Lady"
+light_atk_sprite = Array[Texture2D]([ExtResource("3_qikhw")])
+strong_atk_sprite = Array[Texture2D]([ExtResource("1_4iolv")])
+special_atk_sprite = Array[Texture2D]([ExtResource("4_lbqtu")])
+parry_atk_sprite = Array[Texture2D]([ExtResource("5_lthf4")])
+forward_sprite = Array[Texture2D]([ExtResource("6_sdju5")])
+backward_sprite = Array[Texture2D]([ExtResource("7_hja7u")])
+idle_sprite = Array[Texture2D]([ExtResource("8_bxbhw")])
+stagger_sprite = Array[Texture2D]([ExtResource("9_4qbrh")])
+strong_atk_offset = Array[Vector2]([Vector2(34, 0)])
+
+[node name="Area2D" type="Area2D" parent="." unique_id=1186869658]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D" unique_id=1337591064]
+shape = SubResource("CircleShape2D_ay4uy")
+
+[node name="LightAtk" type="Button" parent="." unique_id=1641766367]
+visible = false
+z_index = 1
+offset_left = 114.0
+offset_top = -30.0
+offset_right = 264.0
+offset_bottom = 30.0
+mouse_filter = 1
+text = "Light Attack"
+
+[node name="Special Attack" type="Button" parent="." unique_id=1497040055]
+visible = false
+z_index = 1
+offset_top = 100.0
+offset_right = 150.0
+offset_bottom = 160.0
+text = "Special Attack"
+
+[node name="Strong Attack" type="Button" parent="." unique_id=663484649]
+visible = false
+z_index = 1
+offset_top = -181.0
+offset_right = 150.0
+offset_bottom = -121.0
+text = "Strong Attack"
+
+[node name="Parry" type="Button" parent="." unique_id=2062538806]
+visible = false
+z_index = 1
+offset_left = -202.0
+offset_top = -181.0
+offset_right = -52.0
+offset_bottom = -121.0
+text = "Parry"
+
+[node name="Move Forward" type="Button" parent="." unique_id=1916192158]
+visible = false
+z_index = 1
+offset_left = -363.0
+offset_top = -93.0
+offset_right = -213.0
+offset_bottom = -33.0
+text = "Move Forward"
+
+[node name="Move Backward" type="Button" parent="." unique_id=1833445160]
+visible = false
+z_index = 1
+offset_left = -250.0
+offset_top = 61.0
+offset_right = -100.0
+offset_bottom = 121.0
+text = "Move Backward"

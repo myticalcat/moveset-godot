@@ -1,22 +1,14 @@
 [gd_scene format=3 uid="uid://64tnpm6qyy60"]
 
 [ext_resource type="Texture2D" uid="uid://djyc2t1o7cnfr" path="res://icon.svg" id="1_03xi6"]
-[ext_resource type="Script" uid="uid://b2vcmnou3sxhv" path="res://scripts/characters/character.gd" id="2_ay4uy"]
+[ext_resource type="Script" uid="uid://dm74eseuc8xab" path="res://scripts/characters/character.gd" id="2_ay4uy"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_ay4uy"]
 radius = 83.21658
 
-[node name="Character" type="Sprite2D" unique_id=362625524 node_paths=PackedStringArray("collision", "mouse_area", "special_atk_btn", "light_atk_btn", "strong_atk_btn", "parry_btn", "move_forward_btn", "move_backward_btn")]
+[node name="Character" type="Sprite2D" unique_id=362625524]
 texture = ExtResource("1_03xi6")
 script = ExtResource("2_ay4uy")
-collision = NodePath("Area2D/CollisionShape2D")
-mouse_area = NodePath("Area2D")
-special_atk_btn = NodePath("Special Attack")
-light_atk_btn = NodePath("LightAtk")
-strong_atk_btn = NodePath("Strong Attack")
-parry_btn = NodePath("Parry")
-move_forward_btn = NodePath("Move Forward")
-move_backward_btn = NodePath("Move Backward")
 
 [node name="Area2D" type="Area2D" parent="." unique_id=1186869658]
 
