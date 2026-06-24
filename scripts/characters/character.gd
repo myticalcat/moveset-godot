@@ -33,6 +33,15 @@ var _char_name: String
 		else: _prefered_position = v
 var _prefered_position := 0
 
+var is_dead := false:
+	set(new):
+		if _delegate:
+			_delegate.is_dead = new
+		else:
+			_is_dead = new
+	get: return _delegate.is_dead if _delegate else _is_dead
+var _is_dead := false
+
 var is_staggered := false:
 	set(new):
 		if _delegate:
@@ -169,7 +178,9 @@ func get_base_damage() -> float:
 	return chipset.get_damage(self)
 
 func take_damage(damage : float):
-	pass
+	health_point = max(health_point - damage, 0)
+	if health_point == 0:
+		is_dead = true
 
 func query_move(opponent_history : Array[Moves.Types], distance_to_opp : int) -> Moves.Types:
 	return Moves.Types.FORW_MV

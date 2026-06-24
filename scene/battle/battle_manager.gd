@@ -67,7 +67,7 @@ func start_round():
 		var player_mv : Moves.Types = Moves.Types.STAGGER
 		if not enemy.is_staggered:
 			enemy_mv = enemy.query_move(player.move_history, get_distance_char())
-
+		
 		if not player.is_staggered:
 			player.turn_on_button()
 			player_mv = await player.query_for_input()

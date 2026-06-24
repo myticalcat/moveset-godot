@@ -20,6 +20,11 @@ config/icon="res://icon.svg"
 SignalBus="*uid://cjea1t7shjteg"
 ConditionManager="*uid://c33itmw1nwwmo"
 
+[display]
+
+window/stretch/mode="viewport"
+window/stretch/aspect="keep_width"
+
 [physics]
 
 3d/physics_engine="Jolt Physics"

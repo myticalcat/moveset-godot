@@ -7,15 +7,16 @@ class_name UIBattle
 @export var l_hp_prg : ProgressBar
 @export var l_mv_hst : HBoxContainer
 @export var l_mv_srl : ScrollContainer
+@export var l_portrait : TextureRect
 
 @export var r_name : Label
 @export var r_hp_lab : Label
 @export var r_hp_prg : ProgressBar
 @export var r_mv_hst : HBoxContainer
+@export var r_portrait : TextureRect
 
-@export var next_pred_mv : Label
-@export var next_pred_cl : Label
-@export var next_pred_tx : TextureRect
+@export var next_pred_cl : Array[Label]
+@export var next_pred_tx : Array[TextureRect]
 
 var l_char : Character
 var r_char : Character
@@ -40,6 +41,10 @@ func setup(cl : Character, cr : Character):
 		c.queue_free()
 
 	update_ui()
+
+func update_prediction(mv : Moves.Types, confidence : float):
+	next_pred_cl[0].text = "Confidence: .2%f" % confidence
+
 
 func update_ui():
 	if not l_char or not r_char:
