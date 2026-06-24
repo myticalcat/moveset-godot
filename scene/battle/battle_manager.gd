@@ -8,7 +8,7 @@ var debug = true
 var arena_size = 9
 
 
-@export var player : Player
+@export var player : Character
 @export var enemy : Character
 @export var ui : UIBattle
 @export var wait_time_between := 1.0
@@ -38,11 +38,14 @@ func _ready() -> void:
 		player.int_stat = 10
 		player.health_point = player.str_stat * 100
 		enemy.health_point = enemy.str_stat * 100
+
+	player.is_interactive = true
+	enemy.is_interactive = false
 	ui.setup(player, enemy)
 	start_game(player, enemy)
 
 		
-func start_game(player_new : Player, enemy_new: Character):
+func start_game(player_new : Character, enemy_new: Character):
 	self.player = player_new
 	self.enemy = enemy_new
 	
@@ -55,10 +58,7 @@ func start_game(player_new : Player, enemy_new: Character):
 	player.global_position = Vector2(arena_mid_point[character_pos[player]], 0)
 	enemy.global_position = Vector2(arena_mid_point[character_pos[enemy]], 0)
 
-	if self.player:
-		start_round()
-	else:
-		start_round() # kalo nanti multiplayer
+	start_round()
 
 func start_round():
 	SignalBus.battle_start.emit()
@@ -66,11 +66,10 @@ func start_round():
 		var enemy_mv : Moves.Types = Moves.Types.STAGGER
 		var player_mv : Moves.Types = Moves.Types.STAGGER
 		if not enemy.is_staggered:
-			enemy_mv = enemy.query_move(player.move_history, get_distance_char())
-		
+			enemy_mv = await enemy.query_move(player.move_history, get_distance_char())
+
 		if not player.is_staggered:
-			player.turn_on_button()
-			player_mv = await player.query_for_input()
+			player_mv = await player.query_move(enemy.move_history, get_distance_char())
 
 		player.is_staggered = false
 		enemy.is_staggered = false

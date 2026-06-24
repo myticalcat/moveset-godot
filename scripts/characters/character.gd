@@ -3,6 +3,8 @@ extends Sprite2D
 
 class_name Character
 
+signal move_chosen(move: Moves.Types)
+
 enum Stat{
 	AGI,
 	STR,
@@ -14,51 +16,60 @@ enum Direction{
 	RIGHT,
 }
 
-var _delegate: Character = null
-
-func set_delegate(d: Character) -> void:
-	_delegate = d
-
-var char_name: String:
-	get: return _delegate.char_name if _delegate else _char_name
+@export var is_interactive: bool = false:
 	set(v):
-		if _delegate: _delegate.char_name = v
-		else: _char_name = v
-var _char_name: String
-
-@export var prefered_position: int:
-	get: return _delegate.prefered_position if _delegate else _prefered_position
-	set(v):
-		if _delegate: _delegate.prefered_position = v
-		else: _prefered_position = v
-var _prefered_position := 0
-
-var is_dead := false:
-	set(new):
-		if _delegate:
-			_delegate.is_dead = new
+		if v == false:
+			collision.queue_free()
+			mouse_area.queue_free()
+			special_atk_btn.queue_free()
+			light_atk_btn.queue_free()
+			strong_atk_btn.queue_free()
+			parry_btn.queue_free()
+			move_forward_btn.queue_free()
+			move_backward_btn.queue_free()
 		else:
-			_is_dead = new
-	get: return _delegate.is_dead if _delegate else _is_dead
-var _is_dead := false
+			for btn in _buttons():
+				btn.visible = false
+				btn.mouse_entered.connect(_cancel_hide)
+				btn.mouse_exited.connect(_schedule_hide)
+			collision.shape.radius = self.texture.get_width() * 3.0 / 4
+			mouse_area.mouse_entered.connect(_fan_out)
+			mouse_area.mouse_exited.connect(_schedule_hide)
+			special_atk_btn.pressed.connect(func(): move_chosen.emit(Moves.Types.SPECIAL_ATK))
+			light_atk_btn.pressed.connect(func(): move_chosen.emit(Moves.Types.LIGHT_ATK))
+			strong_atk_btn.pressed.connect(func(): move_chosen.emit(Moves.Types.STRONG_ATK))
+			parry_btn.pressed.connect(func(): move_chosen.emit(Moves.Types.PARRY))
+			move_forward_btn.pressed.connect(func(): move_chosen.emit(Moves.Types.FORW_MV))
+			move_backward_btn.pressed.connect(func(): move_chosen.emit(Moves.Types.BACK_MV))
 
-var is_staggered := false:
-	set(new):
-		if _delegate:
-			_delegate.is_staggered = new
-		else:
-			_is_staggered = new
-			# texture = sprite_dict[Moves.Types.STAGGER][0]
-	get: return _delegate.is_staggered if _delegate else _is_staggered
+		is_interactive = v
+		
+@export var collision: CollisionShape2D
+@export var mouse_area: Area2D
+@export var special_atk_btn: Button
+@export var light_atk_btn: Button
+@export var strong_atk_btn: Button
+@export var parry_btn: Button
+@export var move_forward_btn: Button
+@export var move_backward_btn: Button
 
-var _is_staggered := false
+var turn_off := false
+var _tween: Tween
+var _hiding := false
+var _fanned_out := false
+var _fan_hiding := false
+var _enable := false
 
-@export var sprite_dict: Dictionary:
-	get: return _delegate.sprite_dict if _delegate else _sprite_dict
-	set(v):
-		if _delegate: _delegate.sprite_dict = v
-		else: _sprite_dict = v
-var _sprite_dict: Dictionary = {
+const RADIUS = 200.0
+
+var char_name: String
+
+@export var prefered_position: int = 0
+
+var is_staggered := false
+var is_dead := false
+
+@export var sprite_dict: Dictionary = {
 	Moves.Types.LIGHT_ATK: [],
 	Moves.Types.STRONG_ATK: [],
 	Moves.Types.SPECIAL_ATK: [],
@@ -68,95 +79,47 @@ var _sprite_dict: Dictionary = {
 	Moves.Types.STAGGER: [],
 }
 
-var max_health_point : float:
-	get: return _delegate.max_health_point if _delegate else _max_health_point
-	set(v):
-		if _delegate: _delegate.max_health_point = v
-		else: _max_health_point = v
-var _max_health_point : float
+var max_health_point: float
+var health_point: float
+var move_history: Array[Moves.Types] = []
+var chipset: Chipset
+var conditions: Array[Condition] = []
 
+@export var agi_stat: float = 0.0
+@export var str_stat: float = 0.0
+@export var int_stat: float = 0.0
 
-var health_point : float:
-	get: return _delegate.health_point if _delegate else _health_point
-	set(v):
-		if _delegate: _delegate.health_point = v
-		else: _health_point = v
-var _health_point : float
-
-var move_history: Array[Moves.Types]:
-	get: return _delegate.move_history if _delegate else _move_history
-	set(v):
-		if _delegate: _delegate.move_history = v
-		else: _move_history = v
-var _move_history: Array[Moves.Types] = []
-
-var chipset: Chipset:
-	get: return _delegate.chipset if _delegate else _chipset
-	set(v):
-		if _delegate: _delegate.chipset = v
-		else: _chipset = v
-var _chipset: Chipset
-
-var conditions: Array[Condition]:
-	get: return _delegate.conditions if _delegate else _conditions
-	set(v):
-		if _delegate: _delegate.conditions = v
-		else: _conditions = v
-var _conditions: Array[Condition] = []
-
-@export var agi_stat: float:
-	get: return _delegate.agi_stat if _delegate else _agi_stat
-	set(v):
-		if _delegate: _delegate.agi_stat = v
-		else: _agi_stat = v
-var _agi_stat := 0.0
-
-@export var str_stat: float:
-	get: return _delegate.str_stat if _delegate else _str_stat
-	set(v):
-		if _delegate: _delegate.str_stat = v
-		else: _str_stat = v
-var _str_stat := 0.0
-
-@export var int_stat: float:
-	get: return _delegate.int_stat if _delegate else _int_stat
-	set(v):
-		if _delegate: _delegate.int_stat = v
-		else: _int_stat = v
-var _int_stat := 0.0
-
-@export var light_atk_range: int:
-	get: return _delegate.light_atk_range if _delegate else _light_atk_range
-	set(v):
-		if _delegate: _delegate.light_atk_range = v
-		else: _light_atk_range = v
-var _light_atk_range := 0
-
-@export var strong_atk_range: int:
-	get: return _delegate.strong_atk_range if _delegate else _strong_atk_range
-	set(v):
-		if _delegate: _delegate.strong_atk_range = v
-		else: _strong_atk_range = v
-var _strong_atk_range := 0
-
-@export var move_range: int:
-	get: return _delegate.move_range if _delegate else _move_range
-	set(v):
-		if _delegate: _delegate.move_range = v
-		else: _move_range = v
-var _move_range := 1
+@export var light_atk_range: int = 0
+@export var strong_atk_range: int = 0
+@export var move_range: int = 1
 
 var side: Direction:
 	set(dir):
-		if _delegate:
-			_delegate.side = dir
-		else:
-			_side = dir
-			flip_h = dir == Direction.LEFT
-	get: return _delegate.side if _delegate else _side
+		_side = dir
+		flip_h = dir == Direction.LEFT
+	get: return _side
 var _side := Direction.RIGHT
 
-func execute_special_attack(o : Character, bm : BattleManager):
+
+func _ready() -> void:
+	if not is_interactive:
+		return
+	for btn in _buttons():
+		btn.visible = false
+		btn.mouse_entered.connect(_cancel_hide)
+		btn.mouse_exited.connect(_schedule_hide)
+	collision.shape.radius = self.texture.get_width() * 3.0 / 4
+	mouse_area.mouse_entered.connect(_fan_out)
+	mouse_area.mouse_exited.connect(_schedule_hide)
+	special_atk_btn.pressed.connect(func(): move_chosen.emit(Moves.Types.SPECIAL_ATK))
+	light_atk_btn.pressed.connect(func(): move_chosen.emit(Moves.Types.LIGHT_ATK))
+	strong_atk_btn.pressed.connect(func(): move_chosen.emit(Moves.Types.STRONG_ATK))
+	parry_btn.pressed.connect(func(): move_chosen.emit(Moves.Types.PARRY))
+	move_forward_btn.pressed.connect(func(): move_chosen.emit(Moves.Types.FORW_MV))
+	move_backward_btn.pressed.connect(func(): move_chosen.emit(Moves.Types.BACK_MV))
+
+
+func execute_special_attack(_o: Character, _bm: BattleManager):
 	pass
 
 func get_pattern_speed() -> float:
@@ -168,7 +131,7 @@ func get_movement_forward() -> int:
 	else:
 		return -1
 
-func add_to_history(mv : Moves.Types):
+func add_to_history(mv: Moves.Types):
 	move_history.append(mv)
 
 func get_movement_backward() -> int:
@@ -177,16 +140,87 @@ func get_movement_backward() -> int:
 func get_base_damage() -> float:
 	return chipset.get_damage(self)
 
-func take_damage(damage : float):
+func take_damage(damage: float):
 	health_point = max(health_point - damage, 0)
 	if health_point == 0:
 		is_dead = true
 
-func query_move(opponent_history : Array[Moves.Types], distance_to_opp : int) -> Moves.Types:
+func query_move(_opponent_history: Array[Moves.Types], _distance_to_opp: int) -> Moves.Types:
+	if is_interactive:
+		turn_on_button()
+		return await query_for_input()
 	return Moves.Types.FORW_MV
+
+func query_for_input() -> Moves.Types:
+	_enable = true
+	var move: Moves.Types = await move_chosen
+	turn_off_button()
+	_enable = false
+	return move
 
 func is_suffix_pattern() -> bool:
 	var pattern_length := len(chipset.pattern)
 	if move_history.slice(-pattern_length) == chipset.pattern:
 		return true
 	return false
+
+func turn_off_button():
+	turn_off = true
+	_fan_hide()
+
+func turn_on_button():
+	turn_off = false
+
+func _buttons() -> Array[Button]:
+	return [special_atk_btn, light_atk_btn, strong_atk_btn,
+			parry_btn, move_forward_btn, move_backward_btn]
+
+func _cancel_hide() -> void:
+	_hiding = false
+	_fan_hiding = false
+
+func _schedule_hide() -> void:
+	_hiding = true
+	await get_tree().create_timer(0.4).timeout
+	if _hiding and not _fan_hiding:
+		_fan_hide()
+
+func _fan_out() -> void:
+	if turn_off:
+		return
+	_hiding = false
+	if _fanned_out:
+		return
+	_fanned_out = true
+	if _tween:
+		_tween.kill()
+	_tween = create_tween().set_parallel(true)
+	var buttons := _buttons()
+	collision.shape.radius = RADIUS + buttons[0].size.length() / 2.0
+	for i in buttons.size():
+		var angle := i * (TAU / buttons.size())
+		var target := (Vector2(cos(angle), sin(angle)) * RADIUS) - buttons[i].size / 2.0
+		buttons[i].visible = true
+		buttons[i].scale = Vector2.ZERO
+		buttons[i].pivot_offset = buttons[i].size / 2.0
+		buttons[i].position = Vector2.ZERO - buttons[i].size / 2.0
+		_tween.tween_property(buttons[i], "position", target, 0.2).set_delay(i * 0.07)
+		_tween.tween_property(buttons[i], "scale", Vector2.ONE, 0.2).set_delay(i * 0.07)
+
+func _fan_hide() -> void:
+	_fan_hiding = true
+	_fanned_out = false
+	if _tween:
+		_tween.kill()
+	_tween = create_tween().set_parallel(true)
+	var buttons := _buttons()
+	var center := Vector2.ZERO - buttons[0].size / 2.0
+	collision.shape.radius = self.texture.get_width() * 3.0 / 4
+	for i in buttons.size():
+		_tween.tween_property(buttons[i], "position", center, 0.15).set_delay(i * 0.02)
+		_tween.tween_property(buttons[i], "scale", Vector2.ZERO, 0.15).set_delay(i * 0.02)
+	_tween.finished.connect(func():
+		for btn in buttons:
+			btn.visible = false
+		_fan_hiding = false
+	)
